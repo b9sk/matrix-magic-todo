@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, closestCorners } from '@dnd-kit/core';
+import { arrayMove } from '@dnd-kit/sortable';
 import { QuadrantCard } from '@/components/QuadrantCard';
 import { TaskCard } from '@/components/TaskCard';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
@@ -90,12 +91,51 @@ const Index = () => {
       return;
     }
 
-    const taskId = active.id as string;
-    const newQuadrant = over.id as QuadrantType;
+    const activeId = active.id as string;
+    const overId = over.id as string;
 
-    setTasks(tasks.map(t => 
-      t.id === taskId ? { ...t, quadrant: newQuadrant } : t
-    ));
+    // Find the active task
+    const activeTask = tasks.find(t => t.id === activeId);
+    if (!activeTask) {
+      setActiveTask(null);
+      return;
+    }
+
+    // Check if we're dropping on a quadrant or another task
+    const isQuadrant = QUADRANTS.some(q => q.id === overId);
+    
+    if (isQuadrant) {
+      // Moving to a different quadrant
+      const newQuadrant = overId as QuadrantType;
+      setTasks(tasks.map(t => 
+        t.id === activeId ? { ...t, quadrant: newQuadrant } : t
+      ));
+    } else {
+      // Reordering within the same quadrant or moving between quadrants
+      const overTask = tasks.find(t => t.id === overId);
+      if (!overTask) {
+        setActiveTask(null);
+        return;
+      }
+
+      if (activeTask.quadrant === overTask.quadrant) {
+        // Reordering within the same quadrant
+        const quadrantTasks = tasks.filter(t => t.quadrant === activeTask.quadrant);
+        const oldIndex = quadrantTasks.findIndex(t => t.id === activeId);
+        const newIndex = quadrantTasks.findIndex(t => t.id === overId);
+        
+        const reorderedQuadrantTasks = arrayMove(quadrantTasks, oldIndex, newIndex);
+        
+        // Merge back with other tasks
+        const otherTasks = tasks.filter(t => t.quadrant !== activeTask.quadrant);
+        setTasks([...otherTasks, ...reorderedQuadrantTasks]);
+      } else {
+        // Moving to a different quadrant by dropping on a task
+        setTasks(tasks.map(t => 
+          t.id === activeId ? { ...t, quadrant: overTask.quadrant } : t
+        ));
+      }
+    }
 
     setActiveTask(null);
   };
