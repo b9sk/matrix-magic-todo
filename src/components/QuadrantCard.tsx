@@ -1,6 +1,6 @@
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { Task, QuadrantInfo } from '@/types/task';
+import { Task, QuadrantInfo, QuadrantType } from '@/types/task';
 import { TaskCard } from './TaskCard';
 import { AddTaskForm } from './AddTaskForm';
 import { Card } from '@/components/ui/card';
@@ -12,6 +12,7 @@ interface QuadrantCardProps {
   onAddTask: (text: string) => void;
   onDeleteTask: (id: string) => void;
   onToggleComplete: (id: string) => void;
+  onMoveTask: (id: string, quadrant: QuadrantType) => void;
 }
 
 export const QuadrantCard = ({
@@ -20,6 +21,7 @@ export const QuadrantCard = ({
   onAddTask,
   onDeleteTask,
   onToggleComplete,
+  onMoveTask,
 }: QuadrantCardProps) => {
   const { setNodeRef, isOver } = useDroppable({
     id: quadrant.id,
@@ -44,6 +46,7 @@ export const QuadrantCard = ({
                 task={task}
                 onDelete={onDeleteTask}
                 onToggleComplete={onToggleComplete}
+                onMove={onMoveTask}
               />
             ))}
           </SortableContext>

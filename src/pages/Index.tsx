@@ -78,6 +78,16 @@ const Index = () => {
     ));
   };
 
+  const handleMoveTask = (id: string, newQuadrant: QuadrantType) => {
+    setTasks(tasks.map(t => 
+      t.id === id ? { ...t, quadrant: newQuadrant } : t
+    ));
+    toast({
+      title: 'Task moved',
+      description: 'Your task has been moved to a different quadrant.',
+    });
+  };
+
   const handleDragStart = (event: DragStartEvent) => {
     const task = tasks.find(t => t.id === event.active.id);
     setActiveTask(task || null);
@@ -173,6 +183,7 @@ const Index = () => {
                 onAddTask={(text) => handleAddTask(quadrant.id, text)}
                 onDeleteTask={handleDeleteTask}
                 onToggleComplete={handleToggleComplete}
+                onMoveTask={handleMoveTask}
               />
             ))}
           </div>

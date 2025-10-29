@@ -1,18 +1,25 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Task } from '@/types/task';
-import { GripVertical, Trash2, Check } from 'lucide-react';
+import { Task, QuadrantType } from '@/types/task';
+import { GripVertical, Trash2, Check, MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 
 interface TaskCardProps {
   task: Task;
   onDelete: (id: string) => void;
   onToggleComplete: (id: string) => void;
+  onMove?: (id: string, quadrant: QuadrantType) => void;
 }
 
-export const TaskCard = ({ task, onDelete, onToggleComplete }: TaskCardProps) => {
+export const TaskCard = ({ task, onDelete, onToggleComplete, onMove }: TaskCardProps) => {
   const {
     attributes,
     listeners,
@@ -63,6 +70,33 @@ export const TaskCard = ({ task, onDelete, onToggleComplete }: TaskCardProps) =>
           >
             <Check className={cn("h-3 w-3", task.completed && "text-primary")} />
           </Button>
+          {onMove && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-6 w-6"
+                >
+                  <MoreVertical className="h-3 w-3" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-background border-border">
+                <DropdownMenuItem onClick={() => onMove(task.id, 'urgent-important')}>
+                  Move to: Do First
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onMove(task.id, 'not-urgent-important')}>
+                  Move to: Schedule
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onMove(task.id, 'urgent-not-important')}>
+                  Move to: Delegate
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onMove(task.id, 'not-urgent-not-important')}>
+                  Move to: Eliminate
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
           <Button
             variant="ghost"
             size="icon"
