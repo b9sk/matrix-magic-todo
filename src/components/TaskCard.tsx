@@ -21,6 +21,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { useTranslations } from '@/hooks/useTranslations';
 import { cn } from '@/lib/utils';
 
 interface TaskCardProps {
@@ -31,6 +32,8 @@ interface TaskCardProps {
 }
 
 export const TaskCard = ({ task, onDelete, onToggleComplete, onMove }: TaskCardProps) => {
+  const t = useTranslations();
+  
   const {
     attributes,
     listeners,
@@ -94,16 +97,16 @@ export const TaskCard = ({ task, onDelete, onToggleComplete, onMove }: TaskCardP
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="bg-background border-border">
                 <DropdownMenuItem onClick={() => onMove(task.id, 'urgent-important')}>
-                  Move to: Do First
+                  {t.moveTo} {t.quadrants['urgent-important'].title}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => onMove(task.id, 'not-urgent-important')}>
-                  Move to: Schedule
+                  {t.moveTo} {t.quadrants['not-urgent-important'].title}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => onMove(task.id, 'urgent-not-important')}>
-                  Move to: Delegate
+                  {t.moveTo} {t.quadrants['urgent-not-important'].title}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => onMove(task.id, 'not-urgent-not-important')}>
-                  Move to: Eliminate
+                  {t.moveTo} {t.quadrants['not-urgent-not-important'].title}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -120,15 +123,15 @@ export const TaskCard = ({ task, onDelete, onToggleComplete, onMove }: TaskCardP
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Удалить задачу?</AlertDialogTitle>
+                <AlertDialogTitle>{t.deleteTask}</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Это действие нельзя отменить. Задача будет удалена навсегда.
+                  {t.deleteTaskConfirmation}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Отмена</AlertDialogCancel>
+                <AlertDialogCancel>{t.cancel}</AlertDialogCancel>
                 <AlertDialogAction onClick={() => onDelete(task.id)}>
-                  Удалить
+                  {t.delete}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

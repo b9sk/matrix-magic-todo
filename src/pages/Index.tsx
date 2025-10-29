@@ -6,47 +6,50 @@ import { TaskCard } from '@/components/TaskCard';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { Task, QuadrantType, QuadrantInfo } from '@/types/task';
 import { useToast } from '@/hooks/use-toast';
+import { useTranslations } from '@/hooks/useTranslations';
 import { LayoutGrid } from 'lucide-react';
-
-const QUADRANTS: QuadrantInfo[] = [
-  {
-    id: 'urgent-important',
-    title: 'Do First',
-    subtitle: 'Urgent & Important',
-    color: 'text-quadrant-urgent-important-foreground',
-    bgColor: 'bg-quadrant-urgent-important',
-    borderColor: 'border-quadrant-urgent-important',
-  },
-  {
-    id: 'not-urgent-important',
-    title: 'Schedule',
-    subtitle: 'Not Urgent & Important',
-    color: 'text-quadrant-not-urgent-important-foreground',
-    bgColor: 'bg-quadrant-not-urgent-important',
-    borderColor: 'border-quadrant-not-urgent-important',
-  },
-  {
-    id: 'urgent-not-important',
-    title: 'Delegate',
-    subtitle: 'Urgent & Not Important',
-    color: 'text-quadrant-urgent-not-important-foreground',
-    bgColor: 'bg-quadrant-urgent-not-important',
-    borderColor: 'border-quadrant-urgent-not-important',
-  },
-  {
-    id: 'not-urgent-not-important',
-    title: 'Eliminate',
-    subtitle: 'Not Urgent & Not Important',
-    color: 'text-quadrant-not-urgent-not-important-foreground',
-    bgColor: 'bg-quadrant-not-urgent-not-important',
-    borderColor: 'border-quadrant-not-urgent-not-important',
-  },
-];
 
 const Index = () => {
   const [tasks, setTasks] = useLocalStorage<Task[]>('eisenhower-tasks', []);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const { toast } = useToast();
+  const t = useTranslations();
+
+  const QUADRANTS: QuadrantInfo[] = [
+    {
+      id: 'urgent-important',
+      title: t.quadrants['urgent-important'].title,
+      subtitle: t.quadrants['urgent-important'].subtitle,
+      color: 'text-quadrant-urgent-important-foreground',
+      bgColor: 'bg-quadrant-urgent-important',
+      borderColor: 'border-quadrant-urgent-important',
+    },
+    {
+      id: 'not-urgent-important',
+      title: t.quadrants['not-urgent-important'].title,
+      subtitle: t.quadrants['not-urgent-important'].subtitle,
+      color: 'text-quadrant-not-urgent-important-foreground',
+      bgColor: 'bg-quadrant-not-urgent-important',
+      borderColor: 'border-quadrant-not-urgent-important',
+    },
+    {
+      id: 'urgent-not-important',
+      title: t.quadrants['urgent-not-important'].title,
+      subtitle: t.quadrants['urgent-not-important'].subtitle,
+      color: 'text-quadrant-urgent-not-important-foreground',
+      bgColor: 'bg-quadrant-urgent-not-important',
+      borderColor: 'border-quadrant-urgent-not-important',
+    },
+    {
+      id: 'not-urgent-not-important',
+      title: t.quadrants['not-urgent-not-important'].title,
+      subtitle: t.quadrants['not-urgent-not-important'].subtitle,
+      color: 'text-quadrant-not-urgent-not-important-foreground',
+      bgColor: 'bg-quadrant-not-urgent-not-important',
+      borderColor: 'border-quadrant-not-urgent-not-important',
+    },
+  ];
+
 
   const handleAddTask = (quadrant: QuadrantType, text: string) => {
     const newTask: Task = {
@@ -58,16 +61,16 @@ const Index = () => {
     };
     setTasks([...tasks, newTask]);
     toast({
-      title: 'Task added',
-      description: 'Your task has been added successfully.',
+      title: t.taskAdded,
+      description: t.taskAddedDescription,
     });
   };
 
   const handleDeleteTask = (id: string) => {
     setTasks(tasks.filter(t => t.id !== id));
     toast({
-      title: 'Task deleted',
-      description: 'Your task has been removed.',
+      title: t.taskDeleted,
+      description: t.taskDeletedDescription,
       variant: 'destructive',
     });
   };
@@ -83,8 +86,8 @@ const Index = () => {
       t.id === id ? { ...t, quadrant: newQuadrant } : t
     ));
     toast({
-      title: 'Task moved',
-      description: 'Your task has been moved to a different quadrant.',
+      title: t.taskMoved,
+      description: t.taskMovedDescription,
     });
   };
 
@@ -161,11 +164,11 @@ const Index = () => {
           <div className="flex items-center gap-3 mb-2">
             <LayoutGrid className="h-8 w-8 text-primary" />
             <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-              Eisenhower Matrix
+              {t.appTitle}
             </h1>
           </div>
           <p className="text-muted-foreground">
-            Organize your tasks by urgency and importance
+            {t.appSubtitle}
           </p>
         </header>
 
