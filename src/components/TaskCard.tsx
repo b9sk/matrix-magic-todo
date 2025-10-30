@@ -53,13 +53,13 @@ export const TaskCard = ({ task, onDelete, onToggleComplete, onMove }: TaskCardP
       ref={setNodeRef}
       style={style}
       className={cn(
-        "group p-3 bg-card hover:shadow-md transition-all duration-200",
+        "group p-3 bg-card hover:shadow-md transition-all duration-200 touch-none",
         isDragging && "opacity-50 shadow-lg scale-105"
       )}
     >
       <div className="flex items-start gap-2">
         <button
-          className="mt-1 cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground"
+          className="mt-1 cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground touch-none"
           {...attributes}
           {...listeners}
         >
