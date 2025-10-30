@@ -173,7 +173,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
-        <header className="mb-8">
+        <header>
           <div className="flex items-center justify-between gap-3 mb-2">
             <div className="flex items-center gap-3">
               <LayoutGrid className="h-8 w-8 text-primary" />
@@ -181,30 +181,31 @@ const Index = () => {
                 {t.appTitle}
               </h1>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setHideCompleted(!hideCompleted)}
-              className="flex items-center gap-2"
-            >
-              {hideCompleted ? (
-                <>
-                  <Eye className="h-4 w-4" />
-                  <span className="hidden sm:inline">{t.showCompleted}</span>
-                </>
-              ) : (
-                <>
-                  <EyeOff className="h-4 w-4" />
-                  <span className="hidden sm:inline">{t.hideCompleted}</span>
-                </>
-              )}
-            </Button>
           </div>
           <p className="text-muted-foreground">
             {t.appSubtitle}
           </p>
         </header>
-
+        <div className='py-4'>
+          <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setHideCompleted(!hideCompleted)}
+              className="flex items-center gap-2"
+          >
+            {hideCompleted ? (
+              <>
+                <Eye className="h-4 w-4" />
+                <span className="hidden sm:inline">{t.showCompleted}</span>
+              </>
+            ) : (
+              <>
+                <EyeOff className="h-4 w-4" />
+                <span className="hidden sm:inline">{t.hideCompleted}</span>
+              </>
+            )}
+          </Button>
+        </div>
         <DndContext
           collisionDetection={closestCorners}
           onDragStart={handleDragStart}
