@@ -118,16 +118,7 @@ export const TaskCard = ({ task, onDelete, onToggleComplete, onEdit, onMove }: T
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="bg-background border-border z-50">
-                {onEdit && (
-                  <>
-                    <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
-                      <Pencil className="h-3 w-3 mr-2" />
-                      {t.editTask}
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                  </>
-                )}
-                {onMove && (
+              {onMove && (
                   <>
                     <DropdownMenuItem onClick={() => onMove(task.id, 'urgent-important')}>
                       {t.moveTo} {t.quadrants['urgent-important'].title}
@@ -142,6 +133,14 @@ export const TaskCard = ({ task, onDelete, onToggleComplete, onEdit, onMove }: T
                       {t.moveTo} {t.quadrants['not-urgent-not-important'].title}
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
+                  </>
+                )}
+                {onEdit && (
+                  <>
+                    <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
+                      <Pencil className="h-3 w-3 mr-2" />
+                      {t.editTask}
+                    </DropdownMenuItem>
                   </>
                 )}
                 <AlertDialog>
