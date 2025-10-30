@@ -124,7 +124,7 @@ export const TaskCard = ({ task, onDelete, onToggleComplete, onEdit, onMove }: T
                       <Pencil className="h-3 w-3 mr-2" />
                       {t.editTask}
                     </DropdownMenuItem>
-                    {onMove && <DropdownMenuSeparator />}
+                    <DropdownMenuSeparator />
                   </>
                 )}
                 {onMove && (
@@ -141,36 +141,34 @@ export const TaskCard = ({ task, onDelete, onToggleComplete, onEdit, onMove }: T
                     <DropdownMenuItem onClick={() => onMove(task.id, 'not-urgent-not-important')}>
                       {t.moveTo} {t.quadrants['not-urgent-not-important'].title}
                     </DropdownMenuItem>
+                    <DropdownMenuSeparator />
                   </>
                 )}
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                      <Trash2 className="h-3 w-3 mr-2 text-destructive" />
+                      <span className="text-destructive">{t.deleteTask}</span>
+                    </DropdownMenuItem>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>{t.deleteTask}</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        {t.deleteTaskConfirmation}
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>{t.cancel}</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => onDelete(task.id)}>
+                        {t.delete}
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </DropdownMenuContent>
             </DropdownMenu>
           )}
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-6 w-6 hover:text-destructive"
-              >
-                <Trash2 className="h-3 w-3" />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>{t.deleteTask}</AlertDialogTitle>
-                <AlertDialogDescription>
-                  {t.deleteTaskConfirmation}
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>{t.cancel}</AlertDialogCancel>
-                <AlertDialogAction onClick={() => onDelete(task.id)}>
-                  {t.delete}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
         </div>
       </div>
 
