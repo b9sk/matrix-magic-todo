@@ -1,15 +1,27 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Task, QuadrantType } from '@/types/task';
-import { GripVertical, Trash2, Check, MoreVertical } from 'lucide-react';
+import { GripVertical, Trash2, Check, MoreVertical, Pencil } from 'lucide-react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,11 +40,14 @@ interface TaskCardProps {
   task: Task;
   onDelete: (id: string) => void;
   onToggleComplete: (id: string) => void;
+  onEdit?: (id: string, text: string) => void;
   onMove?: (id: string, quadrant: QuadrantType) => void;
 }
 
-export const TaskCard = ({ task, onDelete, onToggleComplete, onMove }: TaskCardProps) => {
+export const TaskCard = ({ task, onDelete, onToggleComplete, onEdit, onMove }: TaskCardProps) => {
   const t = useTranslations();
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editText, setEditText] = useState(task.text);
   
   const {
     attributes,
@@ -46,6 +61,13 @@ export const TaskCard = ({ task, onDelete, onToggleComplete, onMove }: TaskCardP
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+  };
+
+  const handleSaveEdit = () => {
+    if (editText.trim() && onEdit) {
+      onEdit(task.id, editText.trim());
+      setIsEditDialogOpen(false);
+    }
   };
 
   return (
@@ -84,7 +106,7 @@ export const TaskCard = ({ task, onDelete, onToggleComplete, onMove }: TaskCardP
           >
             <Check className={cn("h-3 w-3", task.completed && "text-primary")} />
           </Button>
-          {onMove && (
+          {(onEdit || onMove) && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -95,19 +117,32 @@ export const TaskCard = ({ task, onDelete, onToggleComplete, onMove }: TaskCardP
                   <MoreVertical className="h-3 w-3" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-background border-border">
-                <DropdownMenuItem onClick={() => onMove(task.id, 'urgent-important')}>
-                  {t.moveTo} {t.quadrants['urgent-important'].title}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => onMove(task.id, 'not-urgent-important')}>
-                  {t.moveTo} {t.quadrants['not-urgent-important'].title}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => onMove(task.id, 'urgent-not-important')}>
-                  {t.moveTo} {t.quadrants['urgent-not-important'].title}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => onMove(task.id, 'not-urgent-not-important')}>
-                  {t.moveTo} {t.quadrants['not-urgent-not-important'].title}
-                </DropdownMenuItem>
+              <DropdownMenuContent align="end" className="bg-background border-border z-50">
+                {onEdit && (
+                  <>
+                    <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
+                      <Pencil className="h-3 w-3 mr-2" />
+                      {t.editTask}
+                    </DropdownMenuItem>
+                    {onMove && <DropdownMenuSeparator />}
+                  </>
+                )}
+                {onMove && (
+                  <>
+                    <DropdownMenuItem onClick={() => onMove(task.id, 'urgent-important')}>
+                      {t.moveTo} {t.quadrants['urgent-important'].title}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => onMove(task.id, 'not-urgent-important')}>
+                      {t.moveTo} {t.quadrants['not-urgent-important'].title}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => onMove(task.id, 'urgent-not-important')}>
+                      {t.moveTo} {t.quadrants['urgent-not-important'].title}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => onMove(task.id, 'not-urgent-not-important')}>
+                      {t.moveTo} {t.quadrants['not-urgent-not-important'].title}
+                    </DropdownMenuItem>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           )}
@@ -138,6 +173,43 @@ export const TaskCard = ({ task, onDelete, onToggleComplete, onMove }: TaskCardP
           </AlertDialog>
         </div>
       </div>
+
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="bg-background border-border">
+          <DialogHeader>
+            <DialogTitle>{t.editTask}</DialogTitle>
+            <DialogDescription>
+              {t.taskUpdatedDescription}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="task-text">{t.addTask}</Label>
+              <Input
+                id="task-text"
+                value={editText}
+                onChange={(e) => setEditText(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSaveEdit();
+                  }
+                }}
+                placeholder={task.text}
+                className="bg-background"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+              {t.cancel}
+            </Button>
+            <Button onClick={handleSaveEdit} disabled={!editText.trim()}>
+              {t.save}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 };

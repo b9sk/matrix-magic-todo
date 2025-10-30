@@ -81,6 +81,16 @@ const Index = () => {
     ));
   };
 
+  const handleEditTask = (id: string, newText: string) => {
+    setTasks(tasks.map(t => 
+      t.id === id ? { ...t, text: newText } : t
+    ));
+    toast({
+      title: t.taskUpdated,
+      description: t.taskUpdatedDescription,
+    });
+  };
+
   const handleMoveTask = (id: string, newQuadrant: QuadrantType) => {
     setTasks(tasks.map(t => 
       t.id === id ? { ...t, quadrant: newQuadrant } : t
@@ -186,6 +196,7 @@ const Index = () => {
                 onAddTask={(text) => handleAddTask(quadrant.id, text)}
                 onDeleteTask={handleDeleteTask}
                 onToggleComplete={handleToggleComplete}
+                onEditTask={handleEditTask}
                 onMoveTask={handleMoveTask}
               />
             ))}

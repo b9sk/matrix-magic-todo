@@ -13,10 +13,14 @@ interface Translations {
   taskDeletedDescription: string;
   taskMoved: string;
   taskMovedDescription: string;
+  taskUpdated: string;
+  taskUpdatedDescription: string;
   deleteTask: string;
   deleteTaskConfirmation: string;
+  editTask: string;
   cancel: string;
   delete: string;
+  save: string;
   moveTo: string;
   quadrants: {
     'urgent-important': {
@@ -50,10 +54,14 @@ const translations: Record<Language, Translations> = {
     taskDeletedDescription: 'Your task has been removed.',
     taskMoved: 'Task moved',
     taskMovedDescription: 'Your task has been moved to a different quadrant.',
+    taskUpdated: 'Task updated',
+    taskUpdatedDescription: 'Your task has been updated successfully.',
     deleteTask: 'Delete task?',
     deleteTaskConfirmation: 'This action cannot be undone. The task will be deleted permanently.',
+    editTask: 'Edit task',
     cancel: 'Cancel',
     delete: 'Delete',
+    save: 'Save',
     moveTo: 'Move to:',
     quadrants: {
       'urgent-important': {
@@ -85,10 +93,14 @@ const translations: Record<Language, Translations> = {
     taskDeletedDescription: 'Ваша задача была удалена.',
     taskMoved: 'Задача перемещена',
     taskMovedDescription: 'Ваша задача была перемещена в другой квадрант.',
+    taskUpdated: 'Задача обновлена',
+    taskUpdatedDescription: 'Ваша задача успешно обновлена.',
     deleteTask: 'Удалить задачу?',
     deleteTaskConfirmation: 'Это действие нельзя отменить. Задача будет удалена навсегда.',
+    editTask: 'Редактировать',
     cancel: 'Отмена',
     delete: 'Удалить',
+    save: 'Сохранить',
     moveTo: 'Переместить в:',
     quadrants: {
       'urgent-important': {
@@ -120,10 +132,14 @@ const translations: Record<Language, Translations> = {
     taskDeletedDescription: '您的任务已被删除。',
     taskMoved: '任务已移动',
     taskMovedDescription: '您的任务已移动到其他象限。',
+    taskUpdated: '任务已更新',
+    taskUpdatedDescription: '您的任务已成功更新。',
     deleteTask: '删除任务？',
     deleteTaskConfirmation: '此操作无法撤消。任务将被永久删除。',
+    editTask: '编辑',
     cancel: '取消',
     delete: '删除',
+    save: '保存',
     moveTo: '移至：',
     quadrants: {
       'urgent-important': {

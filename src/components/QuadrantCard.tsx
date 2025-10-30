@@ -12,6 +12,7 @@ interface QuadrantCardProps {
   onAddTask: (text: string) => void;
   onDeleteTask: (id: string) => void;
   onToggleComplete: (id: string) => void;
+  onEditTask: (id: string, text: string) => void;
   onMoveTask: (id: string, quadrant: QuadrantType) => void;
 }
 
@@ -21,6 +22,7 @@ export const QuadrantCard = ({
   onAddTask,
   onDeleteTask,
   onToggleComplete,
+  onEditTask,
   onMoveTask,
 }: QuadrantCardProps) => {
   const { setNodeRef, isOver } = useDroppable({
@@ -46,6 +48,7 @@ export const QuadrantCard = ({
                 task={task}
                 onDelete={onDeleteTask}
                 onToggleComplete={onToggleComplete}
+                onEdit={onEditTask}
                 onMove={onMoveTask}
               />
             ))}
