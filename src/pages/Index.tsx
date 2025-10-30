@@ -7,11 +7,13 @@ import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { Task, QuadrantType, QuadrantInfo } from '@/types/task';
 import { useToast } from '@/hooks/use-toast';
 import { useTranslations } from '@/hooks/useTranslations';
-import { LayoutGrid } from 'lucide-react';
+import { LayoutGrid, EyeOff, Eye } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const Index = () => {
   const [tasks, setTasks] = useLocalStorage<Task[]>('eisenhower-tasks', []);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const [hideCompleted, setHideCompleted] = useLocalStorage<boolean>('hide-completed', false);
   const { toast } = useToast();
   const t = useTranslations();
 
@@ -164,18 +166,39 @@ const Index = () => {
   };
 
   const getTasksByQuadrant = (quadrant: QuadrantType) => {
-    return tasks.filter(t => t.quadrant === quadrant);
+    const quadrantTasks = tasks.filter(t => t.quadrant === quadrant);
+    return hideCompleted ? quadrantTasks.filter(t => !t.completed) : quadrantTasks;
   };
 
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
         <header className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <LayoutGrid className="h-8 w-8 text-primary" />
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-              {t.appTitle}
-            </h1>
+          <div className="flex items-center justify-between gap-3 mb-2">
+            <div className="flex items-center gap-3">
+              <LayoutGrid className="h-8 w-8 text-primary" />
+              <h1 className="text-3xl md:text-4xl font-bold text-foreground">
+                {t.appTitle}
+              </h1>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setHideCompleted(!hideCompleted)}
+              className="flex items-center gap-2"
+            >
+              {hideCompleted ? (
+                <>
+                  <Eye className="h-4 w-4" />
+                  <span className="hidden sm:inline">{t.showCompleted}</span>
+                </>
+              ) : (
+                <>
+                  <EyeOff className="h-4 w-4" />
+                  <span className="hidden sm:inline">{t.hideCompleted}</span>
+                </>
+              )}
+            </Button>
           </div>
           <p className="text-muted-foreground">
             {t.appSubtitle}

@@ -22,6 +22,8 @@ interface Translations {
   delete: string;
   save: string;
   moveTo: string;
+  hideCompleted: string;
+  showCompleted: string;
   quadrants: {
     'urgent-important': {
       title: string;
@@ -63,6 +65,8 @@ const translations: Record<Language, Translations> = {
     delete: 'Delete',
     save: 'Save',
     moveTo: 'Move to:',
+    hideCompleted: 'Hide Completed',
+    showCompleted: 'Show Completed',
     quadrants: {
       'urgent-important': {
         title: 'Do First',
@@ -102,6 +106,8 @@ const translations: Record<Language, Translations> = {
     delete: 'Удалить',
     save: 'Сохранить',
     moveTo: 'Переместить в:',
+    hideCompleted: 'Скрыть выполненные',
+    showCompleted: 'Показать выполненные',
     quadrants: {
       'urgent-important': {
         title: 'Сделать сейчас',
@@ -141,6 +147,8 @@ const translations: Record<Language, Translations> = {
     delete: '删除',
     save: '保存',
     moveTo: '移至：',
+    hideCompleted: '隐藏已完成',
+    showCompleted: '显示已完成',
     quadrants: {
       'urgent-important': {
         title: '立即执行',
