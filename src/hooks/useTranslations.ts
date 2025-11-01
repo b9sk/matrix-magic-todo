@@ -24,6 +24,7 @@ interface Translations {
   moveTo: string;
   hideCompleted: string;
   showCompleted: string;
+  clearFilter: string;
   quadrants: {
     'urgent-important': {
       title: string;
@@ -67,6 +68,7 @@ const translations: Record<Language, Translations> = {
     moveTo: 'Move to:',
     hideCompleted: 'Hide Completed',
     showCompleted: 'Show Completed',
+    clearFilter: 'Clear filter',
     quadrants: {
       'urgent-important': {
         title: 'Do First',
@@ -108,6 +110,7 @@ const translations: Record<Language, Translations> = {
     moveTo: 'Переместить в:',
     hideCompleted: 'Скрыть выполненные',
     showCompleted: 'Показать выполненные',
+    clearFilter: 'Сбросить фильтр',
     quadrants: {
       'urgent-important': {
         title: 'Сделать сейчас',
@@ -149,6 +152,7 @@ const translations: Record<Language, Translations> = {
     moveTo: '移至：',
     hideCompleted: '隐藏已完成',
     showCompleted: '显示已完成',
+    clearFilter: '清除过滤器',
     quadrants: {
       'urgent-important': {
         title: '立即执行',

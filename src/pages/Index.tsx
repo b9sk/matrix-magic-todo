@@ -14,6 +14,7 @@ const Index = () => {
   const [tasks, setTasks] = useLocalStorage<Task[]>('eisenhower-tasks', []);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [hideCompleted, setHideCompleted] = useLocalStorage<boolean>('hide-completed', false);
+  const [selectedHashtag, setSelectedHashtag] = useState<string | null>(null);
   const { toast } = useToast();
   const t = useTranslations();
 
@@ -165,9 +166,35 @@ const Index = () => {
     setActiveTask(null);
   };
 
+  const extractHashtags = (text: string): string[] => {
+    const hashtagRegex = /#[\w\-]+/g;
+    const matches = text.match(hashtagRegex);
+    return matches || [];
+  };
+
+  const getAllHashtags = (): string[] => {
+    const allHashtags = new Set<string>();
+    tasks.forEach(task => {
+      const hashtags = extractHashtags(task.text);
+      hashtags.forEach(tag => allHashtags.add(tag));
+    });
+    return Array.from(allHashtags).sort();
+  };
+
   const getTasksByQuadrant = (quadrant: QuadrantType) => {
-    const quadrantTasks = tasks.filter(t => t.quadrant === quadrant);
-    return hideCompleted ? quadrantTasks.filter(t => !t.completed) : quadrantTasks;
+    let quadrantTasks = tasks.filter(t => t.quadrant === quadrant);
+    
+    if (hideCompleted) {
+      quadrantTasks = quadrantTasks.filter(t => !t.completed);
+    }
+    
+    if (selectedHashtag) {
+      quadrantTasks = quadrantTasks.filter(t => 
+        extractHashtags(t.text).includes(selectedHashtag)
+      );
+    }
+    
+    return quadrantTasks;
   };
 
   return (
@@ -186,7 +213,7 @@ const Index = () => {
             {t.appSubtitle}
           </p>
         </header>
-        <div className='py-4'>
+        <div className='py-4 flex flex-wrap items-center gap-2'>
           <Button
               variant="outline"
               size="sm"
@@ -205,6 +232,35 @@ const Index = () => {
               </>
             )}
           </Button>
+          
+          {getAllHashtags().length > 0 && (
+            <>
+              <div className="h-6 w-px bg-border hidden sm:block" />
+              <div className="flex flex-wrap items-center gap-2">
+                {selectedHashtag && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setSelectedHashtag(null)}
+                    className="h-7 px-2 text-xs"
+                  >
+                    {t.clearFilter}
+                  </Button>
+                )}
+                {getAllHashtags().map(hashtag => (
+                  <Button
+                    key={hashtag}
+                    variant={selectedHashtag === hashtag ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSelectedHashtag(selectedHashtag === hashtag ? null : hashtag)}
+                    className="h-7 px-2 text-xs"
+                  >
+                    {hashtag}
+                  </Button>
+                ))}
+              </div>
+            </>
+          )}
         </div>
         <DndContext
           collisionDetection={closestCorners}
